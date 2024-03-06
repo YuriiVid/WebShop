@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ua.nung.edu.pz.model.User;
-import ua.nung.edu.pz.view.ContactView;
 import ua.nung.edu.pz.view.IndexView;
 
 import java.io.IOException;
@@ -22,14 +21,14 @@ public class StartServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		String context = "<h2>Hello World from Servlet!</h2>\n";
-		context += IndexView.getLoginForm();
+		context += IndexView.getInstance().getLoginForm();
 
-		String body = IndexView.getBody(
-				IndexView.getHeader(""),
-				IndexView.getFooter(""),
+		String body = IndexView.getInstance().getBody(
+				IndexView.getInstance().getHeader(""),
+				IndexView.getInstance().getFooter(""),
 				context);
-		body += ContactView.getContactForm();
-		out.println(IndexView.getPage("Welcome to the Shop", body));
+
+		out.println(IndexView.getInstance().getPage("Welcome to the Shop", body));
 	}
 
 	@Override
@@ -45,5 +44,12 @@ public class StartServlet extends HttpServlet {
 		System.out.println(user);
 
 		response.sendRedirect("/");
+	}
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		String path = getServletContext().getRealPath("html/");
+		IndexView.getInstance().setPath(path);
 	}
 }
