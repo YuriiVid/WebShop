@@ -19,22 +19,29 @@ public class StartServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
+		String body = "";
+		String context = "";
 
-		String context = "<h2>Hello World from Servlet!</h2>\n";
-		context += IndexView.getInstance().getLoginForm();
+		switch (request.getPathInfo()) {
+			case "/contacts":
+				context = "<h2>Our Contacts!</h2>\n";
+				break;
+			default:
+				context = "<h2>Hello World from Servlet!</h2>\n";
+				context += IndexView.getInstance().getLoginForm();
+		}
 
-		String body = IndexView.getInstance().getBody(
+		body = IndexView.getInstance().getBody(
 				IndexView.getInstance().getHeader(""),
 				IndexView.getInstance().getFooter(""),
 				context);
 
-		out.println(IndexView.getInstance().getPage("Welcome to the Shop", body));
+		out.println(IndexView.getInstance().getPage("Green Shop", body));
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// String contextPath = request.getContextPath();
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		User user = new User();
@@ -50,6 +57,7 @@ public class StartServlet extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 		String path = getServletContext().getRealPath("html/");
-		IndexView.getInstance().setPath(path);
+		IndexView indexView = IndexView.getInstance();
+		indexView.setPath(path);
 	}
 }
