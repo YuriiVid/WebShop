@@ -23,13 +23,19 @@ public class StartServlet extends HttpServlet {
 		String context = "";
 
 		switch (request.getPathInfo()) {
-			case "/contacts":
-				context = "<h2>Our Contacts!</h2>\n";
-				break;
-			default:
-				context = "<h2>Hello World from Servlet!</h2>\n";
-				context += IndexView.getInstance().getLoginForm();
-		}
+            case "/contacts":
+                context = "<h2>Our Contacts!</h2>\n";
+                break;
+            case "/login":
+                context = "<h2>Login!</h2>\n";
+                context += IndexView.getInstance().getLoginForm();
+                break;
+            case "/forgotpassword":
+                context = "<h2>Restore Password!</h2>\n";
+                break;
+            default:
+                context = "<h2>Hello World from Servlet!</h2>\n";
+        }
 
 		body = IndexView.getInstance().getBody(
 				IndexView.getInstance().getHeader(""),
@@ -56,7 +62,7 @@ public class StartServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		String path = getServletContext().getRealPath("html/");
+		String path = getServletContext().getRealPath("assets/html/");
 		IndexView indexView = IndexView.getInstance();
 		indexView.setPath(path);
 	}
