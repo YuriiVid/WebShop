@@ -11,6 +11,7 @@ import java.io.IOException;
 
 public class Firebase {
     private String firebaseConfigPath;
+    private String firebaseName;
     private static Firebase firebase = new Firebase();
     private Firebase() {
     }
@@ -26,10 +27,11 @@ public class Firebase {
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(refreshToken))
-                    .setDatabaseUrl("https://greenshop-519e0-default-rtdb.europe-west1.firebasedatabase.app/")
+                    .setDatabaseUrl(firebaseName)
                     .build();
-
-            FirebaseApp.initializeApp(options);
+            if(FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -37,11 +39,11 @@ public class Firebase {
         }
     }
 
-    public String getFirebaseConfigPath() {
-        return firebaseConfigPath;
-    }
-
     public void setFirebaseConfigPath(String firebaseConfigPath) {
         this.firebaseConfigPath = firebaseConfigPath;
+    }
+
+    public void setFirebaseName(String firebaseName) {
+        this.firebaseName = firebaseName;
     }
 }
