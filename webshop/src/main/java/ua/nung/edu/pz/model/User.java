@@ -1,9 +1,5 @@
 package ua.nung.edu.pz.model;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.UserRecord;
-
 import java.util.Objects;
 
 public class User {
@@ -95,22 +91,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getEmail(), getPassword(), getPhone(), getCity(), getStreet());
-    }
-
-    public String createUser() {
-        UserRecord.CreateRequest request = new UserRecord.CreateRequest()
-                .setEmail(email)
-                .setEmailVerified(false)
-                .setPassword(password)
-                .setDisplayName(displayName)
-                .setDisabled(false);
-
-        UserRecord userRecord = null;
-        try {
-            userRecord = FirebaseAuth.getInstance().createUser(request);
-        } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
-        }
-        return "Successfully created new user: " + userRecord.getUid();
     }
 }

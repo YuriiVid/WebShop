@@ -1,49 +1,85 @@
 package ua.nung.edu.pz.model;
 
-
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.management.RuntimeErrorException;
+
 public class Firebase {
-    private String firebaseConfigPath;
-    private String firebaseName;
-    private static Firebase firebase = new Firebase();
-    private Firebase() {
-    }
+	private String firebaseConfigPath;
+	private String firebaseName;
+	private static Firebase firebase = new Firebase();
 
-    public static Firebase getInstance() {
-        return firebase;
-    }
+	private Firebase() {
+	}
 
-    public void init() {
-        FileInputStream refreshToken = null;
-        try {
-            refreshToken = new FileInputStream(firebaseConfigPath);
+	public static Firebase getInstance() {
+		return firebase;
+	}
 
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(refreshToken))
-                    .setDatabaseUrl(firebaseName)
-                    .build();
-            if(FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public void init() {
+		FileInputStream refreshToken = null;
+		try {
+			refreshToken = new FileInputStream(firebaseConfigPath);
 
-    public void setFirebaseConfigPath(String firebaseConfigPath) {
-        this.firebaseConfigPath = firebaseConfigPath;
-    }
+			FirebaseOptions options = FirebaseOptions.builder()
+					.setCredentials(GoogleCredentials.fromStream(refreshToken))
+					.setDatabaseUrl(firebaseName)
+					.build();
+			if (FirebaseApp.getApps().isEmpty()) {
+				FirebaseApp.initializeApp(options);
+			}
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    public void setFirebaseName(String firebaseName) {
-        this.firebaseName = firebaseName;
-    }
+	public void setFirebaseConfigPath(String firebaseConfigPath) {
+		this.firebaseConfigPath = firebaseConfigPath;
+	}
+
+	public void setFirebaseName(String firebaseName) {
+		this.firebaseName = firebaseName;
+	}
+
+	public String createUser(User user) {
+		UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+				.setEmail(user.getEmail())
+				.setEmailVerified(false)
+				.setPassword(user.getPassword())
+				.setDisplayName(user.getDisplayName())
+				.setDisabled(false);
+
+		UserRecord userRecord = null;
+		try {
+			userRecord = FirebaseAuth.getInstance().createUser(request);
+		} catch (FirebaseAuthException e) {
+			throw new RuntimeException(e);
+		}
+		return "Successfully created new user: " + userRecord.getUid();
+	}
+
+	public UserRecord getUserByEmail(String email) {
+		UserRecord userRecord;
+		try {
+			userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
+		} catch (FirebaseAuthException e) {
+			if (e.getAuthErrorCode().name().equals("USER_NOT_FOUND"))
+				userRecord = null;
+			else {
+				throw new RuntimeException(e);
+			}
+		}
+		return userRecord;
+	}
 }
