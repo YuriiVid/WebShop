@@ -90,7 +90,7 @@ public class StartServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        String path = getServletContext().getRealPath("html/");
+        String path = getServletContext().getRealPath("assets/html/");
         IndexView indexView = IndexView.getInstance();
         indexView.setPath(path);
 
