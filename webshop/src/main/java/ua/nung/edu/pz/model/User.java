@@ -3,6 +3,7 @@ package ua.nung.edu.pz.model;
 import java.util.Objects;
 
 public class User {
+    public static final String USER_SESSION_NAME = "user";
     private String email;
     private String password;
     private String displayName;

@@ -13,7 +13,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
 public class Firebase {
     public static final String USER_EXISTS = "User exists";
     public static final String PASSWORD_OK = "PASSWORD_OK";
@@ -115,7 +114,6 @@ public class Firebase {
                 return errorMessage;
             }
         } catch (Exception e) {
-            System.out.println("Main catch " + e.getMessage());
             return e.getMessage();
         }
     }
@@ -136,4 +134,3 @@ public class Firebase {
         this.signInUrl = signInUrl;
     }
 }
-
