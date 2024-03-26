@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import ua.nung.edu.pz.model.Firebase;
 import ua.nung.edu.pz.model.User;
 import ua.nung.edu.pz.view.IndexView;
+import ua.nung.edu.pz.view.ViewConfig;
 
 import java.io.*;
 import java.util.Properties;
@@ -91,8 +92,7 @@ public class StartServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         String path = getServletContext().getRealPath("assets/html/");
-        IndexView indexView = IndexView.getInstance();
-        indexView.setPath(path);
+        ViewConfig.getInstance().setPath(path);
 
         initFirebase();
     }
