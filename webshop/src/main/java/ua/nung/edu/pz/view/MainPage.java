@@ -3,117 +3,111 @@ package ua.nung.edu.pz.view;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainPage {
+    private String fullPage;
 
-	private String header;
+    public MainPage(Builder builder) {
+        this.fullPage = builder.fullPage;
+    }
 
-	private String footer;
+    public String getFullPage() {
+        return fullPage;
+    }
 
-	public MainPage(Builder builder) {
-		this.header = builder.header;
-		this.footer = builder.footer;
-	}
+    public static class Builder {
+        // inner use
+        private static String path;
+        // inner use
+        private String emptyPage;
+        private String fullPage;
+        private String title;
+        private String header;
+        private String footer;
 
-	public static class Builder {
-		
-		private String path;
+        public void setPath(String path) {
+            this.path = path;
+        }
+        private String getHtml(String filename) {
+            StringBuilder strb = new StringBuilder("\n");
+            Path file = Paths.get(path + filename + ".html");
+            Charset charset = StandardCharsets.UTF_8;
 
-		private String header;
+            try (BufferedReader reader = Files.newBufferedReader(file, charset))
+            {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    strb.append(line).append("\n");
+                }
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-		private String footer;
+            return strb.toString();
+        }
 
-		// TODO: implement empty page loading
-		public static Builder newInstance() {
-			return new Builder();
-		}
+        private String conditionalTextDelete(String html, String markToDelete) {
+            String startMarker = "<!--Variable ###" + markToDelete + "###-->";
+            String endMarker = "<!--endVariable-->";
+            int startIndex = html.indexOf(startMarker);
+            if (startIndex == -1) {
+                return html;
+            }
+            int endIndex = html.indexOf(endMarker, startIndex);
+            if (endIndex == -1) {
+                return html;
+            }
+            String firstPart = html.substring(0, startIndex);
+            String endPart = html.substring(endIndex + endMarker.length());
+            return firstPart + endPart;
+        }
 
-		public Builder setHeader(String header) {
-			this.header = header;
-			return this;
-		}
+        // for builder pattern
+        private Builder() {}
 
-		public Builder setFooter(String footer) {
-			this.header = footer;
-			return this;
-		}
+        // TODO implement empty page loding
+        public static Builder newInstance() {
+            path = ViewConfig.getInstance().getPath();
+            return new Builder();
+        }
+        public Builder setHeader(String userName) {
+            String html = getHtml("headerPartial");
+            if (userName.length() > 0) {
+                html = conditionalTextDelete(html, "usernameNotLogin")
+                        .replace("<!--###username###-->", userName);
+            } else {
+                html = conditionalTextDelete(html, "usernameLoginedIn");
+            }
+            this.header = html;
+            return  this;
+        }
 
-		public MainPage build() {
-			return new MainPage(this);
-		}
+        public Builder setFooter() {
+            this.footer = getHtml("footerPartial");
+            return this;
+        }
 
-		public String getPage(String title, String body) {
-			return getHtml("emptyPage")
-					.replace("<!--####title###-->", title)
-					.replace("<!--####body###-->", body);
-		}
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
 
-		public String getBody(String header, String footer, String context) {
-			return header +
-					"<div class=\"container\">" +
-					context +
-					"</div>" +
-					footer;
-		}
+        public MainPage build() {
+            this.fullPage = getHtml("emptyPage");
+            this.fullPage = this.title != null ? this.fullPage.replace("<!--####title###-->", title)
+                    : this.fullPage;
 
-		public String getHeader(String userName) {
-			String html = getHtml("headerPartial");
-			if (userName.length() > 0) {
-				html = conditionalTextDelete(html, "usernameNotLogin")
-						.replace("<!--###username###-->", userName);
-				;
-			} else {
-				html = conditionalTextDelete(html, "usernameLoginedIn");
-			}
-			return html;
-		}
+            this.fullPage = this.header != null ? this.fullPage.replace("<!--####header###-->", header)
+                    : this.fullPage;
 
-		public String getFooter(String footer) {
-			return getHtml("footerPartial");
-		}
-
-		public String getLoginForm() {
-			return getHtml("loginFormPartial");
-		}
-
-		public void setPath(String path) {
-			this.path = path;
-		}
-
-		private String getHtml(String filename) {
-			StringBuilder strb = new StringBuilder("\n");
-			Path file = Paths.get(path + filename + ".html");
-			Charset charset = Charset.forName("UTF-8");
-
-			try (BufferedReader reader = Files.newBufferedReader(file, charset)) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					strb.append(line).append("\n");
-				}
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-
-			return strb.toString();
-		}
-
-		private String conditionalTextDelete(String html, String markToDelete) {
-			String startMarker = "<!--Variable ###" + markToDelete + "###-->";
-			String endMarker = "<!--endVariable-->";
-			int startIndex = html.indexOf(startMarker);
-			if (startIndex == -1) {
-				return html;
-			}
-			int endIndex = html.indexOf(endMarker, startIndex);
-			if (endIndex == -1) {
-				return html;
-			}
-			String firstPart = html.substring(0, startIndex);
-			String endPart = html.substring(endIndex + endMarker.length());
-			return firstPart + endPart;
-		}
-	}
+            this.fullPage = this.footer != null ? this.fullPage.replace("<!--####footer###-->", footer)
+                    : this.fullPage;
+            return new MainPage(this);
+        }
+    }
 }

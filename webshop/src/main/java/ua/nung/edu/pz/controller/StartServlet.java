@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import ua.nung.edu.pz.model.Firebase;
 import ua.nung.edu.pz.model.User;
 import ua.nung.edu.pz.view.IndexView;
+import ua.nung.edu.pz.view.MainPage;
 import ua.nung.edu.pz.view.ViewConfig;
 
 import java.io.*;
@@ -51,6 +52,14 @@ public class StartServlet extends HttpServlet {
 
         out.println(IndexView.getInstance().getPage("Green Shop", body));
 
+		String builderPage = MainPage.Builder.newInstance()
+                .setTitle("Green Shop")
+				.setHeader(userName)
+                .setFooter()
+                .build()
+                .getFullPage();
+
+        System.out.println(builderPage);
 //        user.setEmail("email1@email.com");
 //        user.setPassword("112211221122");
 //        user.setDisplayName("Test User");
@@ -92,8 +101,11 @@ public class StartServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         String path = getServletContext().getRealPath("assets/html/");
-        ViewConfig.getInstance().setPath(path);
+		String pathBuilder = getServletContext().getRealPath("assets/htmlBuilder/");
 
+        ViewConfig.getInstance().setPath(pathBuilder);
+		IndexView.getInstance().setPath(path);
+		
         initFirebase();
     }
 
