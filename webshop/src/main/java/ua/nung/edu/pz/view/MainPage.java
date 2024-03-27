@@ -23,14 +23,13 @@ public class MainPage {
         // inner use
         private static String path;
         // inner use
-        private String emptyPage;
         private String fullPage;
         private String title;
         private String header;
         private String footer;
 
         public void setPath(String path) {
-            this.path = path;
+            Builder.path = path;
         }
         private String getHtml(String filename) {
             StringBuilder strb = new StringBuilder("\n");
