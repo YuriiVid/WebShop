@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import ua.nung.edu.pz.model.Firebase;
 import ua.nung.edu.pz.model.User;
-import ua.nung.edu.pz.view.IndexView;
 import ua.nung.edu.pz.view.MainPage;
 import ua.nung.edu.pz.view.ViewConfig;
 
@@ -23,7 +22,6 @@ public class StartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String body = "";
         String context = "";
         HttpSession httpSession = request.getSession();
         User user = (User) httpSession.getAttribute(User.USER_SESSION_NAME);
@@ -89,11 +87,9 @@ public class StartServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        String path = getServletContext().getRealPath("assets/html/");
-		String pathBuilder = getServletContext().getRealPath("assets/htmlBuilder/");
+        String pathBuilder = getServletContext().getRealPath("assets/htmlBuilder/");
 
         ViewConfig.getInstance().setPath(pathBuilder);
-		IndexView.getInstance().setPath(path);
 		
         initFirebase();
     }
