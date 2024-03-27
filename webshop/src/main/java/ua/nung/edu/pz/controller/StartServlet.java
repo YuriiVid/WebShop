@@ -33,10 +33,6 @@ public class StartServlet extends HttpServlet {
             case "/contacts":
                 context = "<h2>Our Contacts!</h2>\n";
                 break;
-            case "/login":
-                context = "<h2>Login!</h2>\n";
-                context += IndexView.getInstance().getLoginForm();
-                break;
             case "/forgotpassword":
                 context = "<h2>Restore Password!</h2>\n";
                 break;
@@ -44,22 +40,15 @@ public class StartServlet extends HttpServlet {
                 context = "<h2>Hello World from Servlet!</h2>\n";
         }
 
-
-        body = IndexView.getInstance().getBody(
-                IndexView.getInstance().getHeader(userName),
-                IndexView.getInstance().getFooter(""),
-                context);
-
-        out.println(IndexView.getInstance().getPage("Green Shop", body));
-
 		String builderPage = MainPage.Builder.newInstance()
                 .setTitle("Green Shop")
 				.setHeader(userName)
+				.setBody(context)
                 .setFooter()
                 .build()
                 .getFullPage();
 
-        System.out.println(builderPage);
+        out.println(builderPage);
 //        user.setEmail("email1@email.com");
 //        user.setPassword("112211221122");
 //        user.setDisplayName("Test User");
