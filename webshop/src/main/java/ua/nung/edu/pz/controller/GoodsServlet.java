@@ -11,6 +11,7 @@ import ua.nung.edu.pz.view.MainPage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "GoodsServlet", urlPatterns = { "/goods/*" })
 public class GoodsServlet extends HttpServlet {
@@ -18,7 +19,7 @@ public class GoodsServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		// TODO: remove test data
 		// testing data start
 		ArrayList<Good> goods = new ArrayList<>();
@@ -27,14 +28,27 @@ public class GoodsServlet extends HttpServlet {
 		for (int i = 1; i <= 15; i++) {
 			goods.add(new Good(i, "Good " + i, lorem, "Brand " + i, photo, i + 4));
 		}
-		// testing data end
-		
-		String context = "<h2>Goods!</h2>\n";
+
+		String body = goods.stream().map(good -> {
+			return "<div class=\"col-12 col-sm-6 col-lg-4 col-xl-3\">" +
+					"<div class=\"card\" style=\"width: 18rem;\">\n" +
+					"  <div class=\"card-body\">\n" +
+					"    <h5 class=\"card-title\">" + good.getName() + "</h5>\n" +
+					"    <h6 class=\"card-subtitle mb-2 text-body-secondary\">Card subtitle</h6>\n" +
+					"    <p class=\"card-text\">" + good.getDescription() + "</p>\n" +
+					"    <a href=\"#\" class=\"card-link\">Card link</a>\n" +
+					"    <a href=\"#\" class=\"card-link\">Another link</a>\n" +
+					"  </div>\n" +
+					"</div>"
+					+ "</div>";
+		}).collect(Collectors.joining());
+
+		body = "<div class=\"container-fluid\"> <div class=\"row\">" + body + "</div> </div>";
 
 		String builderPage = MainPage.Builder.newInstance()
 				.setTitle("Green Shop")
 				.setHeader("")
-				.setBody(context)
+				.setBody(body)
 				.setFooter()
 				.build()
 				.getFullPage();
