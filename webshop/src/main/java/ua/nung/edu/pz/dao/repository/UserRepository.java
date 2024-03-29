@@ -31,7 +31,6 @@ public class UserRepository {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return user;
 	}
 }

@@ -51,7 +51,7 @@ public class StartServlet extends HttpServlet {
 
 		// TODO: remove test code
 		UserRepository userRepository = new UserRepository();
-		User user1 = userRepository.getUserByEmail("ihorlt@gmail.com");
+		User user1 = userRepository.getUserByEmail("yuriividoniak@gmail.com");
 		System.out.println(user1);
 		// user.setEmail("email1@email.com");
 		// user.setPassword("112211221122");
