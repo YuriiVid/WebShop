@@ -1,4 +1,4 @@
-package ua.nung.edu.pz.model;
+package ua.nung.edu.pz.dao.entity;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;

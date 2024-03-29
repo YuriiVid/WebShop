@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ua.nung.edu.pz.model.Good;
+import ua.nung.edu.pz.dao.entity.Good;
 import ua.nung.edu.pz.view.MainPage;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class GoodsServlet extends HttpServlet {
 		}
 
 		String body = goods.stream().map(good -> {
-			return "<div class=\"col-12 col-sm-6 col-lg-4 col-xl-3\">" +
+			return "<div class=\"col-12 col-sm-6 col-lg-4 col-xl-3 my-2\">" +
 					"<div class=\"card\" style=\"width: 18rem;\">\n" +
 					"  <div class=\"card-body\">\n" +
 					"    <h5 class=\"card-title\">" + good.getName() + "</h5>\n" +
