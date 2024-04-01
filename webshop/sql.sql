@@ -3,7 +3,7 @@ create table goods
     id          int auto_increment
         primary key,
     name        varchar(60)  not null,
-    description varchar(220) null,
+    description TEXT null,
     brand       varchar(20)  null,
     photo       json         null,
     likes       int          null
