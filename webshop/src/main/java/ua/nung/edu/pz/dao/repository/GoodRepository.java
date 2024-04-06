@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import ua.nung.edu.pz.dao.entity.Good;
 
-public class GoodsRepository {
+public class GoodRepository {
 	public ArrayList<Good> getAllGoods() {
 		DataSource dataSource = new DataSource();
 		ArrayList<Good> goods = new ArrayList<>();
