@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public class Price {
     private long id;
-
     private long good_id;
     private double from_supplier;
     private double for_client;
