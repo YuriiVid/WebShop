@@ -25,6 +25,8 @@ CREATE TABLE
 		created_at DATE NOT NULL,
 		deleted_at DATE NULL,
 		good_id BIGINT NULL,
+		income INT NULL,
+		outcome INT NULL,
 		CONSTRAINT prices_goods_id_fk FOREIGN KEY (good_id) REFERENCES goods (id) ON UPDATE SET NULL ON DELETE SET NULL
 	);
 
