@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ua.nung.edu.pz.dao.entity.Good;
 import ua.nung.edu.pz.dao.repository.GoodRepository;
-import ua.nung.edu.pz.dao.repository.PriceRepository;
 import ua.nung.edu.pz.view.MainPage;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class GoodsServlet extends HttpServlet {
 		String body = goods.stream().map(good -> {
 			return "<div class=\"col-12 col-sm-6 col-lg-4 col-xl-3 my-2\">" +
 					"<div class=\"card\" style=\"width: 18rem;\">\n" +
-					"<img src=\"/img/" + (good.getPhoto().length > 0 ? good.getPhoto()[0] : "")
+					"<img src=\"/assets/img/" + (good.getPhoto().length > 0 ? good.getPhoto()[0] : "")
 					+ "\" class=\"card-img-top\" alt=\"good image\">" +
 					"  <div class=\"card-body\">\n" +
 					"    <h5 class=\"card-title\">" + good.getName() + "</h5>\n" +
