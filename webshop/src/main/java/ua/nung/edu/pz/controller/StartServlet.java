@@ -15,8 +15,13 @@ import ua.nung.edu.pz.view.ViewConfig;
 import java.io.*;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @WebServlet(name = "StartServlet", urlPatterns = { "/*" }, loadOnStartup = 1)
 public class StartServlet extends HttpServlet {
+
+	private static final Logger logger = LoggerFactory.getLogger(StartServlet.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,10 +57,10 @@ public class StartServlet extends HttpServlet {
 		// TODO: remove test code
 		UserRepository userRepository = new UserRepository();
 		User user1 = userRepository.getUserByEmail("yuriividoniak@gmail.com");
-		System.out.println(user1);
 		// user.setEmail("email1@email.com");
 		// user.setPassword("112211221122");
 		// user.setDisplayName("Test User");
+		logger.info("hello");
 	}
 
 	@Override

@@ -50,7 +50,7 @@ public class GoodRepository {
 					JsonArray jsonArray = jsonElement.getAsJsonArray();
 					photos = new String[jsonArray.size()];
 					int i = 0;
-					for (JsonElement jsonElement1 : jsonArray) {
+					for (JsonElement _jsonElement1 : jsonArray) {
 						photos[i++] = jsonElement.getAsString();
 					}
 				}
