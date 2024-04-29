@@ -1,6 +1,6 @@
 CREATE DATABASE webapp CHARACTER
 SET
-	utf8 COLLATE uft8_general_ci;
+	utf8 COLLATE utf8_general_ci;
 
 
 USE webapp;
