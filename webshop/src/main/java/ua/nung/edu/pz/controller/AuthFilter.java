@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpSession;
 public class AuthFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		// TODO Auto-generated method stub
 		Filter.super.init(filterConfig);
 	}
 
@@ -36,7 +35,6 @@ public class AuthFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
 		Filter.super.destroy();
 	}
 }
