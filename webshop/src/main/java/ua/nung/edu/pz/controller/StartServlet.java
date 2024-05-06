@@ -60,7 +60,6 @@ public class StartServlet extends HttpServlet {
 		// user.setEmail("email1@email.com");
 		// user.setPassword("112211221122");
 		// user.setDisplayName("Test User");
-		logger.info("hello");
 	}
 
 	@Override
@@ -81,7 +80,7 @@ public class StartServlet extends HttpServlet {
 			if (firebaseResponse.equals(Firebase.PASSWORD_OK)) {
 				System.out.println(Firebase.PASSWORD_OK);
 				user.setDisplayName("Best User");
-				httpSession = request.getSession();
+				httpSession = request.getSession(false);
 				httpSession.setAttribute(User.USER_SESSION_NAME, user);
 			} else {
 				System.out.println("Wrong Password");
@@ -100,7 +99,6 @@ public class StartServlet extends HttpServlet {
 	public void init() throws ServletException {
 		super.init();
 		String pathBuilder = getServletContext().getRealPath("assets/htmlBuilder/");
-
 		ViewConfig.getInstance().setPath(pathBuilder);
 
 		initFirebase();
