@@ -2,8 +2,10 @@ package ua.nung.edu.pz.controller;
 
 import ua.nung.edu.pz.dao.entity.Cart;
 import ua.nung.edu.pz.dao.entity.Good;
+import ua.nung.edu.pz.dao.entity.Order;
 import ua.nung.edu.pz.dao.entity.User;
 import ua.nung.edu.pz.dao.repository.GoodRepository;
+import ua.nung.edu.pz.dao.repository.OrderRepository;
 import ua.nung.edu.pz.view.MainPage;
 
 import jakarta.servlet.ServletException;
@@ -18,8 +20,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @WebServlet(name = "GoodsServlet", urlPatterns = { "/goods/*" })
 public class GoodsServlet extends HttpServlet {
+
+	private static final Logger logger = LoggerFactory.getLogger(StartServlet.class);
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
@@ -29,7 +37,7 @@ public class GoodsServlet extends HttpServlet {
 		User user = (User) httpSession.getAttribute(User.USER_SESSION_NAME);
 		String userName = user == null ? "" : user.getDisplayName();
 
-		Cart cart = AddItem(request, user, response);
+		Cart cart = addItem(request, response, user);
 
 		GoodRepository goodRepository = new GoodRepository();
 		ArrayList<Good> goods = goodRepository.getByBrand("Naturalis");
@@ -97,25 +105,38 @@ public class GoodsServlet extends HttpServlet {
 		out.println(builderPage);
 	}
 
-	private Cart AddItem(HttpServletRequest request, User user, HttpServletResponse response) throws IOException {
-		Cart cart = new Cart();
-		String priceStr = request.getParameter("priceid");
-		if (priceStr != null) {
-			long priceId = 0l;
-			try {
-				priceId = Long.parseLong(priceStr);
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-			// check if user logged in
-			if (user != null) {
-				System.out.println("User " + user);
-			}
+	  private Cart addItem(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
+        Cart cart = new Cart();
 
-			if (priceId > 0) {
-				response.sendRedirect("/goods/");
-			}
-		}
-		return cart;
-	}
+        String priceStr = request.getParameter("priceid");
+        if (priceStr != null) {
+            long priceId = 0l;
+            try {
+                priceId = Long.parseLong(priceStr);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            // check if user logged in
+            if(user != null) {
+
+                Order order = new Order(
+                        0l,
+                        user.getId(),
+                        priceId,
+                        false,
+                        "2024-04-29",
+                        null
+                );
+               logger.info("order " + order);
+                OrderRepository orderRepository = new OrderRepository();
+                orderRepository.saveOrUpdate(order);
+            }
+
+            if (priceId > 0) {
+                response.sendRedirect("/goods/");
+            }
+        }
+
+        return cart;
+    }
 }
