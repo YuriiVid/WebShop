@@ -60,3 +60,17 @@ CREATE TABLE
 		deleted_at DATE NULL,
 		CONSTRAINT users_pk2 UNIQUE (email)
 	);
+
+
+CREATE TABLE
+	orders (
+		id INT NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+		user_id BIGINT NULL,
+		price_id BIGINT NULL,
+		is_paid tinyint (1) NOT NULL DEFAULT '0',
+		created_at datetime NOT NULL,
+		deleted_at datetime DEFAULT NULL,
+		PRIMARY KEY (id),
+		CONSTRAINT orders_users_id_fk FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE SET NULL ON DELETE SET NULL,
+		CONSTRAINT orders_prices_id_fk FOREIGN KEY (price_id) REFERENCES prices (id) ON UPDATE SET NULL ON DELETE SET NULL
+	)
